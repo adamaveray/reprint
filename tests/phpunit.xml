@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+	bootstrap="bootstrap.php"
+	processIsolation="false"
+	backupStaticAttributes="false"
+	backupGlobals="false"
+	colors="true">
+	<filter>
+		<blacklist>
+			<directory suffix=".php">../public</directory>
+			<directory suffix=".php">../src/Reprint/libs</directory>
+			<file>../src/Reprint/init.php</file>
+		</blacklist>
+	</filter>
+</phpunit>
