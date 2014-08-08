@@ -160,15 +160,15 @@ class FeedTest extends \PHPUnit_Framework_TestCase {
 	 * @covers ::<!public>
 	 * @dataProvider getRenderFeedData
 	 */
-	public function testRenderFeed($posts = array(), $files = array(), $template = null){
+	public function testRenderFeed($posts = array(), $files = array(), $template = null, $filename = null){
 		$feed	= $this->buildFeed(array(
 			'posts'	=> $posts,
 		));
 
-		$feed->renderFeed($this->outputDir, $template);
+		$feed->renderFeed($this->outputDir, $template, false, $filename);
 
 		foreach($files as $path => $content){
-			$fullPath	= $this->outputDir.'/'.$path.'/'.Feed::DEFAULT_RENDERED_FILENAME;
+			$fullPath	= $this->outputDir.'/'.$path.'/'.(isset($filename) ? $filename : Feed::DEFAULT_RENDERED_FILENAME);
 			$this->assertFileExists($fullPath, 'Each post should be rendered to a file');
 			$this->assertEquals($content, file_get_contents($fullPath), 'Each post should be rendered correctly');
 		}
@@ -185,7 +185,7 @@ EOD;
 
 		$tz	= new \DateTimeZone('UTC');
 
-		$items[]	= array(
+		$items['Default Filename']	= array(
 			array(
 				$this->buildPost(array(
 					'title'		=> 'Post One',
@@ -211,6 +211,36 @@ EOD;
 					.'Content: "The sec­ond post content"',
 			),
 			$template,
+			null
+		);
+
+		$items['Custom Filename']	= array(
+			array(
+				$this->buildPost(array(
+					'title'		=> 'Post One',
+					'date'		=> new \DateTime('2014/01/31', $tz),
+					'content'	=> 'The first post content',
+					'slug'		=> 'post-one',
+				)),
+				$this->buildPost(array(
+					'title'		=> 'Post Two',
+					'date'		=> new \DateTime('2014/02/15', $tz),
+					'content'	=> 'The second post content',
+					'slug'		=> 'post-two',
+				)),
+			),
+			array(
+				'2014/01/post-one'	=>
+					'Title: "Post One"'."\n"
+					.'Date: "2014-01-31T00:00:00+00:00"'."\n"
+					.'Content: "The first post content"',
+				'2014/02/post-two'	=>
+					'Title: "Post Two"'."\n"
+					.'Date: "2014-02-15T00:00:00+00:00"'."\n"
+					.'Content: "The sec­ond post content"',
+			),
+			$template,
+			'alt.php'
 		);
 
 		return $items;

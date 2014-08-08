@@ -35,9 +35,10 @@ class Feed implements \Countable, \IteratorAggregate, \ArrayAccess {
 	 * @param string $outputDir	The path to output rendered templates to
 	 * @param string $template	The template to render posts with *as a string*. Use `file_get_contents('path/to/template')` if the template is a file.
 	 * @param bool $bypassCache Whether to bypass the cache for loading feeds
+	 * @param string $filename A different filename to use for the created file within the post's directory. Will default to ::DEFAULT_RENDERED_FILENAME
 	 * @return bool	Whether rendering was successful. If only some posts are correctly rendered, this will still be false.
 	 */
-	public function renderFeed($outputDir, $template, $bypassCache = false){
+	public function renderFeed($outputDir, $template, $bypassCache = false, $filename = null){
 		if(!isset($filename)){
 			$filename	= static::DEFAULT_RENDERED_FILENAME;
 		}
