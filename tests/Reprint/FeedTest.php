@@ -36,32 +36,33 @@ class FeedTest extends \PHPUnit_Framework_TestCase {
 	 * @dataProvider getPostsData
 	 */
 	public function testGetPosts($expected, $feedContent, $feedURL, $message = null){
-		$buildFeed	= function($cache, $shouldGetItems = true) use($feedContent, $expected, $feedURL){
+		$self	= $this; // PHP 5.3 compatibility
+		$buildFeed	= function($cache, $shouldGetItems = true) use(&$self, $feedContent, $expected, $feedURL){
 			// Build mock feed data
-			$dataSource	= $this->getMockBuilder('\\SimplePie')
+			$dataSource	= $self->getMockBuilder('\\SimplePie')
 							   ->setMethods(array('get_items'))
 							   ->getMock();
-			$dataSource->expects($shouldGetItems ? $this->once() : $this->never())
+			$dataSource->expects($shouldGetItems ? $self->once() : $self->never())
 					   ->method('get_items')
-					   ->will($this->returnValue($feedContent));
+					   ->will($self->returnValue($feedContent));
 
 			// Build feed
-			$feed	= $this->buildFeed(array(), array('buildRawFeed', 'buildPost'));
-			$feed->expects($shouldGetItems ? $this->once() : $this->never())
+			$feed	= $self->buildFeed(array(), array('buildRawFeed', 'buildPost'));
+			$feed->expects($shouldGetItems ? $self->once() : $self->never())
 				 ->method('buildRawFeed')
-				 ->will($this->returnValue($dataSource));
+				 ->will($self->returnValue($dataSource));
 
 			if($shouldGetItems){
 				for($i = 0, $max = count($feedContent); $i < $max; $i++){
-					$feed->expects($this->at($i + 1)) // 1-indexed
+					$feed->expects($self->at($i + 1)) // 1-indexed
 						 ->method('buildPost')
 						 ->with($feedContent[$i])
-						 ->will($this->returnValue($expected[$i]));
+						 ->will($self->returnValue($expected[$i]));
 				}
 			}
 
-			$feed->__construct($feedURL, $this->cacheDir);
-			$this->setFeedProperty($feed, 'cache', $cache);
+			$feed->__construct($feedURL, $self->cacheDir);
+			$self->setFeedProperty($feed, 'cache', $cache);
 			return $feed;
 		};
 
