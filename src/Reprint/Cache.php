@@ -11,6 +11,9 @@ class Cache {
 		$this->cacheDir	= $cacheDir;
 		if(!is_dir($this->cacheDir)){
 			$result	= mkdir($this->cacheDir, 0777, true);
+			if($result === false){
+				throw new \RuntimeException('Could not create cache dir');
+			}
 		}
 	}
 

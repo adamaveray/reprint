@@ -2,6 +2,7 @@
 namespace Reprint;
 
 use SimplePie_Item;
+use SimplePie_Category;
 use TruncateHTML;
 use phpTypography;
 
@@ -49,7 +50,7 @@ class Post {
 
 		// Store values
 		foreach($details as $key => $value){
-			if(is_callable([$this, 'set'.$key])){
+			if(is_callable(array($this, 'set'.$key))){
 				$this->{'set'.$key}($value);
 			} else {
 				$this->{$key} = $value;
@@ -218,7 +219,7 @@ class Post {
 		$slug	= $this->getSlug();
 		$date	= $this->getDate();
 		if(!isset($slug) || !isset($date)){
-			return;
+			return null;
 		}
 
 		if(!isset($pattern)){
@@ -334,7 +335,7 @@ class Post {
 
 		$categories	= $item->get_categories();
 		if($categories){
-			$details['categories']	= array_map(function($simplePieCategory){
+			$details['categories']	= array_map(function(SimplePie_Category $simplePieCategory){
 				return $simplePieCategory->get_term();
 			}, $categories);
 		} else {
