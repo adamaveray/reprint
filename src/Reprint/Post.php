@@ -344,4 +344,4 @@ class Post {
 
 		return $details;
 	}
-};
+}
