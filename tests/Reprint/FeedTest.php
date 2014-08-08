@@ -46,8 +46,7 @@ class FeedTest extends \PHPUnit_Framework_TestCase {
 					   ->will($this->returnValue($feedContent));
 
 			// Build feed
-			$invocations = 0;
-			$feed        = $this->buildFeed([], array('buildRawFeed', 'buildPost'));
+			$feed	= $this->buildFeed(array(), array('buildRawFeed', 'buildPost'));
 			$feed->expects($shouldGetItems ? $this->once() : $this->never())
 				 ->method('buildRawFeed')
 				 ->will($this->returnValue($dataSource));
@@ -73,6 +72,7 @@ class FeedTest extends \PHPUnit_Framework_TestCase {
 			  ->with(Feed::CACHE_KEY_POSTS, $expected, $this->anything())
 			  ->will($this->returnValue(true));
 
+		/** @var Feed $feed */
 		$feed	= $buildFeed($cache);
 		$posts	= $feed->getPosts(true);
 		$this->assertEquals($expected, $posts, $message);
@@ -90,8 +90,9 @@ class FeedTest extends \PHPUnit_Framework_TestCase {
 			  ->with(Feed::CACHE_KEY_POSTS, $expected, $this->anything())
 			  ->will($this->returnValue(true));
 
+		/** @var Feed $feed */
 		$feed	= $buildFeed($cache);
-		$posts	= $feed->getPosts();
+		$feed->getPosts();
 
 		// With full cache
 		$cache	= $this->buildCache(array('load', 'save', 'contains'));
@@ -106,8 +107,9 @@ class FeedTest extends \PHPUnit_Framework_TestCase {
 		$cache->expects($this->never())
 			  ->method('save');
 
+		/** @var Feed $feed */
 		$feed	= $buildFeed($cache, false);
-		$posts	= $feed->getPosts();
+		$feed->getPosts();
 	}
 
 	public function getPostsData(){
@@ -313,6 +315,7 @@ EOD;
 		$builder	= $this->getMockBuilder(static::$classname)
 						   ->disableOriginalConstructor()
 						   ->setMethods($methods);
+		/** @var Feed|\PHPUnit_Framework_MockObject_MockObject $mock */
 		$mock	= $builder->getMock();
 
 		// Set properties

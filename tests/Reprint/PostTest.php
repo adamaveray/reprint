@@ -104,9 +104,9 @@ class PostTest extends \PHPUnit_Framework_TestCase {
 	 * @expectedException \Exception
 	 */
 	public function testConstructWithInvalidDate(){
-		$this->testConstruct([
+		$this->testConstruct(array(
 			'date'	=> 'not a date',
-		]);
+		));
 	}
 
 
@@ -535,6 +535,7 @@ HTML;
 				switch($key){
 					case 'date':
 						$return	= $this->returnCallback(function($format) use($value){
+							/** @var \DateTime $value */
 							return $value->format($format);
 						});
 						break;

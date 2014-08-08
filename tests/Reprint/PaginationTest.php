@@ -258,7 +258,7 @@ class PaginationTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function getPaginatingData(){
-		$items	= [];
+		$items	= array();
 
 		// First page
 		$postsCount	= 35;
