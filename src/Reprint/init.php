@@ -1,8 +1,6 @@
 <?php
 namespace Reprint;
 
-defined('¶') || define('¶', "\n");
-
 date_default_timezone_set('Australia/Sydney');
 
 $files	= array(
