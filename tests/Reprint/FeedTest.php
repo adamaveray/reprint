@@ -36,8 +36,11 @@ class FeedTest extends \PHPUnit_Framework_TestCase {
 	 * @dataProvider getPostsData
 	 */
 	public function testGetPosts($expected, $feedContent, $feedURL, $message = null){
-		$self	= $this; // PHP 5.3 compatibility
-		$buildFeed	= function($cache, $shouldGetItems = true) use(&$self, $feedContent, $expected, $feedURL){
+		// PHP 5.3 compatibility
+		$self		= $this;
+		$cacheDir	= $this->cacheDir;
+
+		$buildFeed	= function($cache, $shouldGetItems = true) use(&$self, $feedContent, $expected, $feedURL, $cacheDir){
 			// Build mock feed data
 			$dataSource	= $self->getMockBuilder('\\SimplePie')
 							   ->setMethods(array('get_items'))
@@ -61,7 +64,7 @@ class FeedTest extends \PHPUnit_Framework_TestCase {
 				}
 			}
 
-			$feed->__construct($feedURL, $self->cacheDir);
+			$feed->__construct($feedURL, $cacheDir);
 			$self->setFeedProperty($feed, 'cache', $cache);
 			return $feed;
 		};
@@ -312,7 +315,7 @@ EOD;
 	 * @param array|null $methods
 	 * @return Feed|\PHPUnit_Framework_MockObject_MockObject
 	 */
-	protected function buildFeed(array $properties = null, array $methods = null){
+	public function buildFeed(array $properties = null, array $methods = null){
 		$builder	= $this->getMockBuilder(static::$classname)
 						   ->disableOriginalConstructor()
 						   ->setMethods($methods);
@@ -332,7 +335,7 @@ EOD;
 	 * @param string $name
 	 * @param mixed $value
 	 */
-	protected function setFeedProperty(Feed $feed, $name, $value){
+	public function setFeedProperty(Feed $feed, $name, $value){
 		$property	= new \ReflectionProperty($feed, $name);
 		$property->setAccessible(true);
 		$property->setValue($feed, $value);
