@@ -35,7 +35,7 @@ class Pagination implements \IteratorAggregate, \Countable {
 	 * @return int
 	 */
 	public function getPagesCount(){
-		return ceil($this->getPostsCount() / $this->getPageSize());
+		return (int)ceil($this->getPostsCount() / $this->getPageSize());
 	}
 
 	/**
@@ -89,6 +89,22 @@ class Pagination implements \IteratorAggregate, \Countable {
 		}
 
 		$this->currentPage	= $currentPage;
+	}
+
+	/**
+	 * @return bool	Whether the current page is the first in the pagination
+	 * @see isLastPage()
+	 */
+	public function isFirstPage(){
+		return ($this->getCurrentPage() === 1);
+	}
+
+	/**
+	 * @return bool	Whether the current page is the last in the pagination
+	 * @see isFirstPage()
+	 */
+	public function isLastPage(){
+		return ($this->getCurrentPage() === $this->getPagesCount());
 	}
 
 	/**

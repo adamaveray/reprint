@@ -182,6 +182,59 @@ class PaginationTest extends \PHPUnit_Framework_TestCase {
 
 
 	/**
+	 * @covers ::isFirstPage
+	 * @covers ::isLastPage
+	 * @covers ::<!public>
+	 * @dataProvider getIsPageData
+	 */
+	public function testIsPage($feedSize, $pageSize, $currentPage, $isFirstPage, $isLastPage){
+		$pagination	= new Pagination($this->buildFeed($this->generatePosts($feedSize)), $pageSize);
+		$pagination->setCurrentPage($currentPage);
+
+		$this->assertEquals($isFirstPage, $pagination->isFirstPage(), 'The first page state should be determined correctly');
+		$this->assertEquals($isLastPage, $pagination->isLastPage(), 'The last page state should be determined correctly');
+	}
+
+	public function getIsPageData(){
+		$items	= array();
+
+		$items['First & Last']	= array(
+			10,
+			10,
+			1,
+			true,
+			true
+		);
+
+		$items['Neither']	= array(
+			30,
+			10,
+			2,
+			false,
+			false
+		);
+
+		$items['First Only']	= array(
+			30,
+			10,
+			1,
+			true,
+			false
+		);
+
+		$items['Last Only']	= array(
+			30,
+			10,
+			3,
+			false,
+			true
+		);
+
+		return $items;
+	}
+
+
+	/**
 	 * @covers ::getPagesCount
 	 * @covers ::getPosts
 	 * @covers ::count

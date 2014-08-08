@@ -29,8 +29,9 @@ header('Content-Type: text/html; charset=utf-8');
 	</ol>
 
 	<footer class="posts-navigation">
-		<?php if($posts->getCurrentPage() > 1){ ?>
-			<a rel="next" href="">Newer</a>
+		<?php if(!$posts->isFirstPage()){ ?>
+			<a rel="next" href="">Newest</a>
+			<a rel="next" href="?p=<?php echo $posts->getCurrentPage()-1;?>">Newer</a>
 		<?php } ?>
 
 		<ol class="posts-pagination">
@@ -39,8 +40,9 @@ header('Content-Type: text/html; charset=utf-8');
 			<?php } ?>
 		</ol>
 
-		<?php if($posts->getCurrentPage() < $posts->getPagesCount()){ ?>
-			<a rel="prev" href="?p=<?php echo $posts->getPagesCount();?>">Older</a>
+		<?php if(!$posts->isLastPage()){ ?>
+			<a rel="prev" href="?p=<?php echo $posts->getCurrentPage()+1;?>">Older</a>
+			<a rel="prev" href="?p=<?php echo $posts->getPagesCount();?>">Oldest</a>
 		<?php } ?>
 	</footer>
 <?php } ?>
